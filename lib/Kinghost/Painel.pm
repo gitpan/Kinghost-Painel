@@ -1,10 +1,10 @@
 package Kinghost::Painel;
 
         use strict;
-		use warnings 'all';
-		use Win32::ASP;
-		use Win32::OLE;
-		use WWW::Mechanize;
+	use warnings 'all';
+	use Win32::ASP;
+	use Win32::OLE;
+	use WWW::Mechanize;
         use HTML::TreeBuilder::XPath;
         use HTML::Entities;
         use JSON;
@@ -482,88 +482,97 @@ Kinghost::Painel - Object for hosting automation using Kinghost (www.kinghost.ne
 
 =head1 VERSION
 
-version 0.001
+version 0.002
 
 =head1 SYNOPSIS
   
-use Kinghost::Painel; 
+    use Kinghost::Painel; 
 
-my $painel = new Kinghost::Painel();
+    my $painel = new Kinghost::Painel();
 
-# Loga no painel
-$painel->logar("email@revenda.com.br", "senhadarevenda");
-
-
-# Novo Cliente
-my $empresa = "João25";
-my $nome = "José João25";
-my $tipoPessoa = "F"; # F - J - I(ignorar)
-my $cpfcnpj = "000.000.000-00"; # CPF ou CNPJ
-my $email = 'xxxxxgg@gmail.com';
-my $emailcobranca = 'xxxxx@gmail.com';
-my $senha = "teste";
-my $senhaConfimacao = "teste";
-my $telefone = "";
-my $fax = "";
-my $cep = "";
-my $endereco = "";
-my $cidade = "";
-my $estado = "";
-print $painel->novoCliente($empresa, $nome, $tipoPessoa, $cpfcnpj, $email, $emailcobranca, $senha, $senhaConfimacao, $telefone, $fax, $cep, $endereco, $cidade, $estado);
+    # Loga no painel
+    $painel->logar("email@revenda.com.br", "senhadarevenda");
 
 
-# Novo Domínio
-my $plano = "45198";
-my $dominio = "topjeca.com.br";
-my $cliente = "107645";
-my $pagoate = "2012-03-01";
-my $senha = "testeteste";
-my $plataforma = "Windows";
-my $webmail = "SquirrelMail";
-print $painel->novoDominio($plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail);
+    # Novo Cliente
+    my $empresa = "João25";
+    my $nome = "José João25";
+    my $tipoPessoa = "F"; # F - J - I(ignorar)
+    my $cpfcnpj = "000.000.000-00"; # CPF ou CNPJ
+    my $email = 'xxxxxgg@gmail.com';
+    my $emailcobranca = 'xxxxx@gmail.com';
+    my $senha = "teste";
+    my $senhaConfimacao = "teste";
+    my $telefone = "";
+    my $fax = "";
+    my $cep = "";
+    my $endereco = "";
+    my $cidade = "";
+    my $estado = "";
+    print $painel->novoCliente($empresa, $nome, $tipoPessoa, $cpfcnpj, $email, $emailcobranca, $senha, $senhaConfimacao, $telefone, $fax, $cep, $endereco, $cidade, $estado);
 
 
-# Novo Banco PGSql
-my $idDominio = "291076";
-my $senha = "teste";
-print $painel->novoPGSql($idDominio, $senha);
+    # Novo Domínio
+    my $plano = "45198";
+    my $dominio = "topjeca.com.br";
+    my $cliente = "107645";
+    my $pagoate = "2012-03-01";
+    my $senha = "testeteste";
+    my $plataforma = "Windows";
+    my $webmail = "SquirrelMail";
+    print $painel->novoDominio($plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail);
+
+
+    # Novo Banco PGSql
+    
+    my $idDominio = "291076";
+    my $senha = "teste";
+    print $painel->novoPGSql($idDominio, $senha);
 
 =head1 METHODS
 
 =head2 logar
 
 Loga no painel de controle. Este método deverá ser usado chamado antes de qualquer outro método. Ativa flag $statusLogin.
-$painel->logar($email, $senha);
+
+    my $status_login = $painel->logar($email, $senha);
 
 Return string
-logged, invalid login, not found, unknow HTTP error, connection error
+    
+    logged, invalid login, not found, unknow HTTP error, connection error
 
 =head2 novoCliente
 
 Cadastra novo cliente
-print $painel->novoCliente($empresa, $nome, $tipoPessoa, $cpfcnpj, $email, $emailcobranca, $senha, $senhaConfimacao, $telefone, $fax, $cep, $endereco, $cidade, $estado);
+
+    print $painel->novoCliente($empresa, $nome, $tipoPessoa, $cpfcnpj, $email, $emailcobranca, $senha, $senhaConfimacao, $telefone, $fax, $cep, $endereco, $cidade, $estado);
 
 Return JSON
-{"nome":"José João25","resposta":"registrado","status":"sucesso","codigo":"107630"}
-{"resposta":"E-mail em uso","status":"erro"}
-{"resposta":"efetue login primeiro","status":"erro"}
+
+    {"nome":"José João25","resposta":"registrado","status":"sucesso","codigo":"107630"}
+    {"resposta":"E-mail em uso","status":"erro"}
+    {"resposta":"efetue login primeiro","status":"erro"}
 
 =head2 novoDominio
 
 Cadastra novo Dominio
-print $painel->novoDominio($plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail);
+    
+    print $painel->novoDominio($plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail);
 
 Return JSON
-{"dominio":"topjeca.com.br","resposta":"registrado","status":"sucesso","codigo":"291076"}
-{"dominio":"topjeca.com.br","resposta":"dominio ja existe","status":"erro"}
+
+    {"dominio":"topjeca.com.br","resposta":"registrado","status":"sucesso","codigo":"291076"}
+    {"dominio":"topjeca.com.br","resposta":"dominio ja existe","status":"erro"}
 
 =head2 novoPGSql
 
 Cadastra Banco PGSql
-print $painel->novoPGSql($idDominio, $senha);
+    
+    print $painel->novoPGSql($idDominio, $senha);
 
 Return JSON
-{"resposta":"banco criado","status":"sucesso","banco":"topjeca"}
+    
+    {"resposta":"banco criado","status":"sucesso","banco":"topjeca"}
  
 
 =head1 AUTHORS
