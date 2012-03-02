@@ -2,7 +2,7 @@
 
         use strict;
 	use warnings 'all';
-	use WWW::Mechanize;
+        use WWW::Mechanize;
         use HTML::TreeBuilder::XPath;
         use HTML::Entities;
         use JSON;
@@ -480,7 +480,7 @@ Kinghost::Painel - Object for hosting automation using Kinghost (www.kinghost.ne
 
 =head1 VERSION
 
-version 0.002
+version 0.004
 
 =head1 SYNOPSIS
   
@@ -564,7 +564,7 @@ Return JSON
 
 =head2 novoPGSql
 
-Cadastra Banco PGSql
+Cadastra Banco PGSql. O nome do banco e do user é criado automaticamente pelo sistema da kinghost, não sendo opcional.
     
     print $painel->novoPGSql($idDominio, $senha);
 
