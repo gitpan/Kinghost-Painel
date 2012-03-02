@@ -1,0 +1,9 @@
+LICENSE
+MANIFEST
+META.yml
+Makefile.PL
+README
+config.ini
+dist.ini
+lib/Kinghost/Painel.pm
+lib/Kinghost/dist.ini
