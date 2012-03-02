@@ -1,9 +1,7 @@
-package Kinghost::Painel;
+Ôªøpackage Kinghost::Painel;
 
         use strict;
 	use warnings 'all';
-	use Win32::ASP;
-	use Win32::OLE;
 	use WWW::Mechanize;
         use HTML::TreeBuilder::XPath;
         use HTML::Entities;
@@ -21,7 +19,7 @@ package Kinghost::Painel;
             };
             
             $statusLogin = 0;
-            $entitieschars = '¡Õ”⁄…ƒœ÷‹À¿Ã“Ÿ»√’¬Œ‘€ ·ÌÛ˙È‰Ôˆ¸Î‡ÏÚ˘Ë„ı‚ÓÙ˚Í«Á';
+            $entitieschars = '√Å√ç√ì√ö√â√Ñ√è√ñ√ú√ã√Ä√å√í√ô√à√É√ï√Ç√é√î√õ√ä√°√≠√≥√∫√©√§√Ø√∂√º√´√†√¨√≤√π√®√£√µ√¢√Æ√¥√ª√™√á√ß';
             $mech = WWW::Mechanize->new;
             
             bless $self, $class;           
@@ -495,8 +493,8 @@ version 0.002
 
 
     # Novo Cliente
-    my $empresa = "Jo„o25";
-    my $nome = "JosÈ Jo„o25";
+    my $empresa = "Jo√£o25";
+    my $nome = "Jos√© Jo√£o25";
     my $tipoPessoa = "F"; # F - J - I(ignorar)
     my $cpfcnpj = "000.000.000-00"; # CPF ou CNPJ
     my $email = 'xxxxxgg@gmail.com';
@@ -512,7 +510,7 @@ version 0.002
     print $painel->novoCliente($empresa, $nome, $tipoPessoa, $cpfcnpj, $email, $emailcobranca, $senha, $senhaConfimacao, $telefone, $fax, $cep, $endereco, $cidade, $estado);
 
 
-    # Novo DomÌnio
+    # Novo Dom√≠nio
     my $plano = "45198";
     my $dominio = "topjeca.com.br";
     my $cliente = "107645";
@@ -533,7 +531,7 @@ version 0.002
 
 =head2 logar
 
-Loga no painel de controle. Este mÈtodo dever· ser usado chamado antes de qualquer outro mÈtodo. Ativa flag $statusLogin.
+Loga no painel de controle. Este m√©todo dever√° ser usado chamado antes de qualquer outro m√©todo. Ativa flag $statusLogin.
 
     my $status_login = $painel->logar($email, $senha);
 
@@ -549,7 +547,7 @@ Cadastra novo cliente
 
 Return JSON
 
-    {"nome":"JosÈ Jo„o25","resposta":"registrado","status":"sucesso","codigo":"107630"}
+    {"nome":"Jos√© Jo√£o25","resposta":"registrado","status":"sucesso","codigo":"107630"}
     {"resposta":"E-mail em uso","status":"erro"}
     {"resposta":"efetue login primeiro","status":"erro"}
 
@@ -577,12 +575,12 @@ Return JSON
 
 =head1 AUTHORS
 
-JosÈ Eduardo Perotta de Almeida, C<< eduardo at web2solutions.com.br >>
+Jos√© Eduardo Perotta de Almeida, C<< eduardo at web2solutions.com.br >>
 
 
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2012 JosÈ Eduardo Perotta de Almeida.
+Copyright 2012 Jos√© Eduardo Perotta de Almeida.
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
