@@ -2,6 +2,7 @@
 
         use strict;
 	use warnings 'all';
+	use utf8;
         use WWW::Mechanize;
         use HTML::TreeBuilder::XPath;
         use HTML::Entities;
@@ -184,7 +185,7 @@
                         }
                         
                         my $json = \%resposta;
-                        my $json_text = to_json($json);
+                        my $json_text = to_json($json, { utf8  => 1 });
                         
                         return $json_text;
                     }
@@ -196,7 +197,7 @@
                             url =>  $mech->uri(),
 			);
 			my $json = \%resposta;
-                        my $json_text = to_json($json);
+                        my $json_text = to_json($json, { utf8  => 1 });
                         return $json_text;
                     }
                     else
@@ -207,7 +208,7 @@
                             url =>  $mech->uri(),
 			);
 			my $json = \%resposta;
-                        my $json_text = to_json($json);
+                        my $json_text = to_json($json, { utf8  => 1 });
                         return $json_text;
                     }
                 }
@@ -220,7 +221,7 @@
                 );
                 
                 my $json = \%resposta;
-                my $json_text = to_json($json);
+                my $json_text = to_json($json, { utf8  => 1 });
                             
                 return $json_text;
             }
@@ -312,7 +313,7 @@
 					);
 				}
 				my $json = \%resposta;
-				my $json_text = to_json($json);
+				my $json_text = to_json($json, { utf8  => 1 });
 				return $json_text;
 			}
 			elsif($mech->status() == 404)
@@ -323,7 +324,7 @@
                                 url =>  $mech->uri(),
                             );
                             my $json = \%resposta;
-                            my $json_text = to_json($json);
+                            my $json_text = to_json($json, { utf8  => 1 });
                             return $json_text;
                         }
                         else
@@ -334,7 +335,7 @@
                                 url =>  $mech->uri(),
                             );
                             my $json = \%resposta;
-                            my $json_text = to_json($json);
+                            my $json_text = to_json($json, { utf8  => 1 });
                             return $json_text;
                         }
 		}
@@ -347,7 +348,7 @@
                 );
                 
                 my $json = \%resposta;
-                my $json_text = to_json($json);
+                my $json_text = to_json($json, { utf8  => 1 });
                             
                 return $json_text;
             }
@@ -403,7 +404,7 @@
 							banco =>  $banco,
 						);
 						my $json = \%resposta;
-                                                my $json_text = to_json($json);
+                                                my $json_text = to_json($json, { utf8  => 1 });
                                                 return $json_text;
 					}
 					elsif($mech->status() == 404)
@@ -414,7 +415,7 @@
                                                 url =>  $mech->uri(),
                                             );
                                             my $json = \%resposta;
-                                            my $json_text = to_json($json);
+                                            my $json_text = to_json($json, { utf8  => 1 });
                                             return $json_text;
                                         }
                                         else
@@ -425,7 +426,7 @@
                                                 url =>  $mech->uri(),
                                             );
                                             my $json = \%resposta;
-                                            my $json_text = to_json($json);
+                                            my $json_text = to_json($json, { utf8  => 1 });
                                             return $json_text;
                                         }
 				}
@@ -438,7 +439,7 @@
                                 url =>  $mech->uri(),
                             );
                             my $json = \%resposta;
-                            my $json_text = to_json($json);
+                            my $json_text = to_json($json, { utf8  => 1 });
                             return $json_text;
                         }
                         else
@@ -449,7 +450,7 @@
                                 url =>  $mech->uri(),
                             );
                             my $json = \%resposta;
-                            my $json_text = to_json($json);
+                            my $json_text = to_json($json, { utf8  => 1 });
                             return $json_text;
                         }
 		}
@@ -463,7 +464,7 @@
                 );
                 
                 my $json = \%resposta;
-                my $json_text = to_json($json);
+                my $json_text = to_json($json, { utf8  => 1 });
                             
                 return $json_text;
             }
@@ -516,7 +517,7 @@
 					banco =>  $banco,
                                     );
                                     my $json = \%resposta;
-                                    my $json_text = to_json($json);
+                                    my $json_text = to_json($json, { utf8  => 1 });
                                     return $json_text;
 				}
 				elsif($mech->status() == 404)
@@ -527,7 +528,7 @@
                                                 url =>  $mech->uri(),
                                      );
                                      my $json = \%resposta;
-                                     my $json_text = to_json($json);
+                                     my $json_text = to_json($json, { utf8  => 1 });
                                      return $json_text;
                                 }
                                 else
@@ -538,7 +539,7 @@
                                                 url =>  $mech->uri(),
                                     );
                                     my $json = \%resposta;
-                                    my $json_text = to_json($json);
+                                    my $json_text = to_json($json, { utf8  => 1 });
                                     return $json_text;
                                 }
                             }
@@ -551,7 +552,7 @@
                                 url =>  $mech->uri(),
                             );
                             my $json = \%resposta;
-                            my $json_text = to_json($json);
+                            my $json_text = to_json($json, { utf8  => 1 });
                             return $json_text;
                         }
                         else
@@ -562,7 +563,7 @@
                                 url =>  $mech->uri(),
                             );
                             my $json = \%resposta;
-                            my $json_text = to_json($json);
+                            my $json_text = to_json($json, { utf8  => 1 });
                             return $json_text;
                         }
 		}
@@ -575,7 +576,7 @@
                     resposta =>  "efetue login primeiro",
                 );                
                 my $json = \%resposta;
-                my $json_text = to_json($json);
+                my $json_text = to_json($json, { utf8  => 1 });
                             
                 return $json_text;
             }
@@ -638,7 +639,7 @@
                                     {
                                         %resposta = (
                                             status  => "erro",
-                                            resposta =>  "Erro de FTP. Verifique as credenciais de acesso ao FTP ou o diretorio alvo no FTP remoto",
+                                            resposta =>  "Erro de FTP. Verifique as credenciais de acesso ao FTP ou o diretório alvo no FTP remoto",
                                         );
                                     }
                                     elsif(index($paginaMigra, "dominio.migra.ftp.php") != -1 && index($paginaMigra, "id_dominio") != -1 && index($paginaMigra, "id_migracao") != -1)
@@ -657,7 +658,7 @@
                                     }                        
                                     
                                     my $json = \%resposta;
-                                    my $json_text = to_json($json);
+                                    my $json_text = to_json($json, { utf8  => 1 });
                                     return $json_text;
 				}
 				elsif($mech->status() == 404)
@@ -668,7 +669,7 @@
                                                 url =>  $mech->uri(),
                                      );
                                      my $json = \%resposta;
-                                     my $json_text = to_json($json);
+                                     my $json_text = to_json($json, { utf8  => 1 });
                                      return $json_text;
                                 }
                                 else
@@ -679,7 +680,7 @@
                                                 url =>  $mech->uri(),
                                     );
                                     my $json = \%resposta;
-                                    my $json_text = to_json($json);
+                                    my $json_text = to_json($json, { utf8  => 1 });
                                     return $json_text;
                                 }
                             }  
@@ -692,7 +693,7 @@
                                 url =>  $mech->uri(),
                             );
                             my $json = \%resposta;
-                            my $json_text = to_json($json);
+                            my $json_text = to_json($json, { utf8  => 1 });
                             return $json_text;
                         }
                         else
@@ -703,7 +704,7 @@
                                 url =>  $mech->uri(),
                             );
                             my $json = \%resposta;
-                            my $json_text = to_json($json);
+                            my $json_text = to_json($json, { utf8  => 1 });
                             return $json_text;
                         }
 		}
@@ -716,11 +717,265 @@
                     resposta =>  "efetue login primeiro",
                 );                
                 my $json = \%resposta;
-                my $json_text = to_json($json);
+                my $json_text = to_json($json, { utf8  => 1 });
                             
                 return $json_text;
             }
         }
+        
+        sub criaUserStats
+        {
+            my($self, $idDominio, $usuario, $senha) = @_;
+            my %resposta;
+            if($statusLogin)
+            {
+                my $html;
+                my $banco;
+                # migra ftp
+		$mech->post("https://painel2.kinghost.net/mysql.php?id_dominio=$idDominio");
+		if($mech->success())
+		{
+			if($mech->status() == 200)
+			{                          
+                            
+                            # criaUserStats
+                            $mech->get("https://painel2.kinghost.net/stats.php?id_dominio=$idDominio");
+                            $mech->submit_form(
+				form_id => "formCria",
+                            	fields      => {
+                            		acao => "stats",
+                            		subacao => "adicionar_usuario",
+                            		id_dominio => $idDominio,
+                            		usuario => $usuario,
+                            		senha => $senha,
+                            		senha1 => $senha,                         		
+                                }
+                            );
+                            if($mech->success())
+                            {
+				if($mech->status() == 200)
+				{
+                                    $html = $mech->content;
+                                    $mech->update_html( $html );
+                                    my $tree = HTML::TreeBuilder::XPath->new;
+                                    $tree->parse( $html );
+                                    my $respostacriaUserStats = $tree->findnodes( '//body' )->[0]->as_HTML;
+                                    # alert##T##usu%E1rio%20adicionado%20com%20sucesso eval##T##window.location%3D%27%2Fstats.php%3Fid_dominio%3D291348%27%3B
+                                    if(index($respostacriaUserStats, "adicionado") != -1 && index($respostacriaUserStats, "sucesso") != -1 && index($respostacriaUserStats, "id_dominio") != -1)
+                                    {
+                                        %resposta = (
+                                            status  => "sucesso",
+                                            resposta =>  "usuario do stats criado com sucesso",
+                                            usuario => $usuario,
+                                            senha => $senha,
+                                         );
+                                    }
+                                    else
+                                    {
+                                        %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "$respostacriaUserStats",
+                                        );
+                                    }                        
+                                    
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json, { utf8  => 1 });
+                                    return $json_text;
+				}
+				elsif($mech->status() == 404)
+                                {
+                                     %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "not found",
+                                                url =>  $mech->uri(),
+                                     );
+                                     my $json = \%resposta;
+                                     my $json_text = to_json($json, { utf8  => 1 });
+                                     return $json_text;
+                                }
+                                else
+                                {
+                                    %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "unknow HTTP error",
+                                                url =>  $mech->uri(),
+                                    );
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json, { utf8  => 1 });
+                                    return $json_text;
+                                }
+                            }  
+			}
+			elsif($mech->status() == 404)
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "not found",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json, { utf8  => 1 });
+                            return $json_text;
+                        }
+                        else
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "unknow HTTP error",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json, { utf8  => 1 });
+                            return $json_text;
+                        }
+		}
+		# criaUserStats
+            }
+            else
+            {
+                %resposta = (
+                    status  => "erro",
+                    resposta =>  "efetue login primeiro",
+                );                
+                my $json = \%resposta;
+                my $json_text = to_json($json, { utf8  => 1 });
+                            
+                return $json_text;
+            }
+        }
+        
+        
+        
+        sub novaCaixaEmail
+        {
+            my($self, $idDominio, $caixa, $senha, $tamanho) = @_;
+            my %resposta;
+            if($statusLogin)
+            {
+                my $html;
+                my $banco;
+                # novaCaixaEmail
+		$mech->post("https://painel2.kinghost.net/mysql.php?id_dominio=$idDominio");
+		if($mech->success())
+		{
+			if($mech->status() == 200)
+			{                          
+                            
+                            # novaCaixaEmail
+                            $mech->get("https://painel2.kinghost.net/kingmail.php?id_dominio=$idDominio");
+                            $mech->submit_form(
+                            form_id => "addCaixa",
+                                    fields      => {
+                                        acao => "addCaixaPostal",
+                                        id_dominio => $idDominio,
+                                        tipoAdd => "caixapostal",
+                                        novaCaixa => $caixa,
+                                        novaSenha => $senha, 
+                                        novaSenha2 => $senha,
+                                        novaCaixaTamanho => $tamanho, 
+                                    }
+                            );
+                            if($mech->success())
+                            {
+				if($mech->status() == 200)
+				{
+                                    $html = $mech->content;
+                                    $mech->update_html( $html );
+                                    my $tree = HTML::TreeBuilder::XPath->new;
+                                    $tree->parse( $html );
+                                    my $respostanovaCaixaEmail = $tree->findnodes( '//body' )->[0]->as_HTML;
+                                    if(index($respostanovaCaixaEmail, "caixa postal adicionada com") != -1)
+                                    {
+                                        %resposta = (
+                                            status  => "sucesso",
+                                                resposta =>  "caixa de e-mail criada com sucesso",
+                                                usuario => $caixa,
+                                                senha => $senha,
+                                         );
+                                    }
+                                    elsif(index($respostanovaCaixaEmail, "Erro ao criar caixa postal") != -1)
+                                    {
+                                        %resposta = (
+                                            status  => "erro",
+                                                resposta =>  "caixa postal ja existe",
+                                                                                usuario => $caixa,
+                                         );
+                                    }
+                                    else
+                                    {
+                                        %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "$respostanovaCaixaEmail",
+                                        );
+                                    }                        
+                                    
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json, { utf8  => 1 });
+                                    return $json_text;
+				}
+				elsif($mech->status() == 404)
+                                {
+                                     %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "not found",
+                                                url =>  $mech->uri(),
+                                     );
+                                     my $json = \%resposta;
+                                     my $json_text = to_json($json, { utf8  => 1 });
+                                     return $json_text;
+                                }
+                                else
+                                {
+                                    %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "unknow HTTP error",
+                                                url =>  $mech->uri(),
+                                    );
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json, { utf8  => 1 });
+                                    return $json_text;
+                                }
+                            }  
+			}
+			elsif($mech->status() == 404)
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "not found",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json, { utf8  => 1 });
+                            return $json_text;
+                        }
+                        else
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "unknow HTTP error",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json, { utf8  => 1 });
+                            return $json_text;
+                        }
+		}
+		# novaCaixaEmail
+            }
+            else
+            {
+                %resposta = (
+                    status  => "erro",
+                    resposta =>  "efetue login primeiro",
+                );                
+                my $json = \%resposta;
+                my $json_text = to_json($json, { utf8  => 1 });
+                            
+                return $json_text;
+            }
+        }
+        
+              
 1;
 
 __END__
@@ -732,36 +987,35 @@ Kinghost::Painel - Object for hosting automation using Kinghost (www.kinghost.ne
 
 =head1 VERSION
 
-version 0.005
+version 0.006
 
 =head1 SYNOPSIS
   
     use Kinghost::Painel; 
 
     my $painel = Kinghost::Painel->new();
-    
     #my $painel = new Kinghost::Painel();
 
     # Loga no painel
-    $painel->logar("email@revenda.com.br", "senhadarevenda");
+    $painel->logar( "email@revenda.com.br", "senhadarevenda" );
 
 
     # Novo Cliente
-    my $empresa = "João25";
-    my $nome = "José João25";
+    my $empresa = "Yogurteiras Top Jeca";
+    my $nome = "José da Silva";
     my $tipoPessoa = "F"; # F - J - I(ignorar)
     my $cpfcnpj = "000.000.000-00"; # CPF ou CNPJ
-    my $email = 'xxxxxgg@gmail.com';
-    my $emailcobranca = 'xxxxx@gmail.com';
-    my $senha = "teste";
-    my $senhaConfimacao = "teste";
+    my $email = 'josesilva@gmail.com';
+    my $emailcobranca = 'josesilva@gmail.com';
+    my $senha = "xxxxxx";
+    my $senhaConfimacao = "xxxx";
     my $telefone = "";
     my $fax = "";
     my $cep = "";
     my $endereco = "";
     my $cidade = "";
     my $estado = "";
-    print $painel->novoCliente($empresa, $nome, $tipoPessoa, $cpfcnpj, $email, $emailcobranca, $senha, $senhaConfimacao, $telefone, $fax, $cep, $endereco, $cidade, $estado);
+    print $painel->novoCliente( $empresa, $nome, $tipoPessoa, $cpfcnpj, $email, $emailcobranca, $senha, $senhaConfimacao, $telefone, $fax, $cep, $endereco, $cidade, $estado );
 
 
     # Novo Domínio
@@ -772,14 +1026,40 @@ version 0.005
     my $senha = "testeteste";
     my $plataforma = "Windows";
     my $webmail = "SquirrelMail";
-    print $painel->novoDominio($plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail);
+    print $painel->novoDominio( $plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail );
 
 
     # Novo Banco PGSql
-    
     my $idDominio = "291076";
     my $senha = "teste";
     print $painel->novoPGSql($idDominio, $senha);
+    
+    
+    # importa FTP externo
+    my $idDominio = "000000";
+    my $host = "ftp.xxxxxx.com.br";
+    my $user = "usuarioftp";
+    my $pass = "senhaftp";
+    my $dirOrigem = 'www';
+    my $dirDestino = 'www';
+    print $painel->importaFTPExterno( $idDominio, $host, $user, $pass, $dirOrigem, $dirDestino );
+    
+    
+    # cria user para o sistema de stats do domínio
+    my $idDominio = "000000";
+    my $usuario = "xxxxx";
+    my $senha = "xxxxx";
+    print $painel->criaUserStats( $idDominio, $usuario, $senha );
+    
+    
+    # cria nova conta de e-mail
+    my $idDominio = "00000";
+    my $caixa = "caixa";
+    my $senha = "xxxxx";
+    my $tamanho = "5242880"; # em bytes
+    print $painel->novaCaixaEmail( $idDominio, $caixa, $senha, $tamanho );
+    
+    
 
 =head1 METHODS
 
@@ -842,7 +1122,7 @@ Return JSON
 
 Importa conteúdo de um FTP remoto para o ftp do domínio local. Informe o diretório de origem e o diretório de destino
     
-    my $idDominio = "xxxxx";
+    my $idDominio = "000000";
     my $host = "ftp.xxxxxx.com.br";
     my $user = "usuarioftp";
     my $pass = "senhaftp";
@@ -855,8 +1135,45 @@ Return JSON
     {"resposta":"Migracao em andamento. Quando a migracao terminar os arquivos estarao em seu site","status":"sucesso"}
     {"resposta":"Erro de FTP. Verifique as credenciais de acesso ao FTP ou o diretorio alvo no FTP remoto","status":"erro"}
     {"resposta":"diretorio de origem invalido","status":"erro"}
- 
+    
+
+=head2 criaUserStats
+
+Protege e cria um usuário para acesso ao stats do domínio. www.dominio.com.br/stats
+    
+    my $idDominio = "000000";
+    my $usuario = "xxxxx";
+    my $senha = "xxxxx";
+    print $painel->criaUserStats( $idDominio, $usuario, $senha );
+
+Return JSON
+    
+    {"resposta":"usuario do stats criado com sucesso","status":"sucesso"}
+    {"resposta":"error string","status":"erro"}
+    
+
+=head2 novaCaixaEmail
+
+Cria caixa de e-mail
+    
+    my $idDominio = "000000";
+    my $caixa = "caixa";
+    my $senha = "xxxxx";
+    # 1048576 > 1 MB, 2097152 > 2 MB, 3145728 > 3 MB, 4194304 > 4 MB, 5242880 > 5 MB, 
+    # 6291456 > 6 MB, 7340032 > 7 MB, 8388608 > 8 MB, 9437184 > 9 MB, 10485760 > 10 MB, 
+    # 11534336 > 11 MB, 12582912 > 12 MB, 13631488 > 13 MB, 14680064 > 14 MB, 15728640 > 15 MB, 
+    # 16777216 > 16 MB, 17825792 > 17 MB, 18874368 > 18 MB, 19922944 > 19 MB, 
+    my $tamanho = "5242880"; # em bytes
+    print $painel->novaCaixaEmail( $idDominio, $caixa, $senha, $tamanho );
+
+Return JSON
+    
+    {"usuario":"caixa","resposta":"caixa postal ja existe","status":"erro"}
+    {"senha":"senhaemail","usuario":"contato","resposta":"caixa de e-mail criada com sucesso","status":"sucesso"}
+
+
 =head1 EXAMPLES
+
 
 Look at eg/ folder
 
@@ -879,10 +1196,11 @@ See http://dev.perl.org/licenses/ for more information.
 
 =head1 BUGS AND LIMITATIONS
 
-No bugs have been reported.
+O método novoMySQL nao está funcionando devido a problemas de autenticação nessa página do painel.
+A URL da API referente à este recurso também está com problemas de autenticação
 
 Please report any bugs or feature requests through the web interface at
-L<http://rt.cpan.org>.
+<http://rt.cpan.org>.
 
 =head1 DISCLAIMER OF WARRANTY
 
