@@ -5,5 +5,9 @@ Makefile.PL
 README
 config.ini
 dist.ini
+eg/importaFTPExterno.aspl
+eg/novoCliente.aspl
+eg/novoDominio.aspl
+eg/novoPGSql.aspl
 lib/Kinghost/Painel.pm
 lib/Kinghost/dist.ini

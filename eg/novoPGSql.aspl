@@ -1,0 +1,20 @@
+<%@LANGUAGE="PerlScript" CODEPAGE="65001"%>
+<%
+use strict;
+use warnings 'all';
+use Win32::ASP;
+
+use base 'ASP4::FormHandler';
+use vars __PACKAGE__->VARS; # Import $Request, $Response, $Session, etc:
+
+$Response->{charset}="utf-8";
+
+use Kinghost::Painel; 
+my $painel = Kinghost::Painel->new();
+
+$painel->logar('xxxxxxxx@xxxxxx.com','xxxxxxxxx');
+
+my $idDominio = "000000";
+my $senha = "xxxxxx";
+print $painel->novoPGSql($idDominio, $senha);
+%>

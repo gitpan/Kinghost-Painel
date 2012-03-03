@@ -39,8 +39,8 @@
                             $mech->submit_form(
                                     form_id => "formLogin",
                                     fields      => {
-                                            email => $email,
-                                            senha => $senha,
+                                        email => $email,
+                                        senha => $senha,
                                     }
                             );
                             $html = $mech->content;
@@ -73,7 +73,6 @@
             {
                 return "connection error";
             }
-            
         }
         
         
@@ -469,6 +468,259 @@
                 return $json_text;
             }
         }
+        
+        
+        sub novoMySQL
+        {
+            my($self, $idDominio, $senha) = @_;
+            my %resposta;
+            if($statusLogin)
+            {
+                my $html;
+                my $banco;
+                # cria MySQL
+		$mech->post("https://painel2.kinghost.net/mysql.php?id_dominio=$idDominio");
+		if($mech->success())
+		{
+			if($mech->status() == 200)
+			{
+                            $html = $mech->content;
+                            $mech->update_html( $html );
+                            my $tree = HTML::TreeBuilder::XPath->new;
+                            $tree->parse( $html );
+                            my $inputValueNBanco = $tree->findnodes( '//input[@id="db"]' )->[0]->as_HTML;
+                            my @nomeBanco = split(/value="/, $inputValueNBanco); #"
+                            @nomeBanco = split(/"/, $nomeBanco[1]); #"						
+                            $banco = $nomeBanco[0];
+                            $mech->submit_form(
+                                form_id => "formCria",
+                                    fields      => {
+					acao => "mysql",
+					subacao => "cria",
+					id_dominio => "$idDominio",
+					senha => "$senha",
+					senha1 => "$senha",
+                                    }
+                            );				
+                            if($mech->success())
+                            {
+				if($mech->status() == 200)
+				{
+                                    $html = $mech->content;
+                                    $mech->update_html( $html );
+                                    my $tree = HTML::TreeBuilder::XPath->new;
+                                    $tree->parse( $html );
+                                    %resposta = (
+                                        status  => "sucesso",
+					resposta =>  "banco criado",
+					banco =>  $banco,
+                                    );
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json);
+                                    return $json_text;
+				}
+				elsif($mech->status() == 404)
+                                {
+                                     %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "not found",
+                                                url =>  $mech->uri(),
+                                     );
+                                     my $json = \%resposta;
+                                     my $json_text = to_json($json);
+                                     return $json_text;
+                                }
+                                else
+                                {
+                                    %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "unknow HTTP error",
+                                                url =>  $mech->uri(),
+                                    );
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json);
+                                    return $json_text;
+                                }
+                            }
+			}
+			elsif($mech->status() == 404)
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "not found",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json);
+                            return $json_text;
+                        }
+                        else
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "unknow HTTP error",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json);
+                            return $json_text;
+                        }
+		}
+		# cria MySQL
+            }
+            else
+            {
+                %resposta = (
+                    status  => "erro",
+                    resposta =>  "efetue login primeiro",
+                );                
+                my $json = \%resposta;
+                my $json_text = to_json($json);
+                            
+                return $json_text;
+            }
+        }      
+        
+        sub importaFTPExterno
+        {
+            my($self, $idDominio, $host, $user, $pass, $dirOrigem, $dirDestino) = @_;
+            my %resposta;
+            if($statusLogin)
+            {
+                my $html;
+                my $banco;
+                # migra ftp
+		$mech->post("https://painel2.kinghost.net/mysql.php?id_dominio=$idDominio");
+		if($mech->success())
+		{
+			if($mech->status() == 200)
+			{                          
+                            # migra ftp
+                            $mech->post("https://painel2.kinghost.net/dominio.migra.ftp.php?id_dominio=$idDominio");
+                            $mech->submit_form(
+                            	form_id => "formFTP",
+                            	fields      => {
+                            		acao => "migracao_ftp",
+                            		subacao => "efetua_backup",
+                            		id_dominio => $idDominio,
+                            		host => $host,
+                            		user => $user,
+                            		pass => $pass,
+                            		baixar_subdir => "1",
+                            		dir_origem => '#personalizado#',
+                            		origem_input => $dirOrigem,
+                            		dir_destino => "3",
+                            		destino_input => $dirDestino,                            		
+                            	}
+                            );
+                            # migra ftp
+                            if($mech->success())
+                            {
+				if($mech->status() == 200)
+				{
+                                    $html = $mech->content;
+                                    $mech->update_html( $html );
+                                    my $tree = HTML::TreeBuilder::XPath->new;
+                                    $tree->parse( $html );
+                                    my $paginaMigra = $tree->findnodes( '//body' )->[0]->as_HTML;
+                                    #print $paginaMigra;
+                                    # alert##T##Diret%F3rio%20de%20origem%20inv%E1lido%20%28www%26%2347%3Bimovelmanager%29
+                                    # erro ao acessar ftp remoto alert##T##Erro%20ao%20utilizar%20diret%F3rio%20destino%20no%20FTP%20remoto%20%28www%2Fimovelmanager%29
+                                    # sucesso eval##T##window.location%20%3D%20%27%2Fdominio.migra.ftp.php%3Fid_dominio%3D291076%26id_migracao%3D59981%27%3B
+                                    if(index($paginaMigra, "Diret") != -1 && index($paginaMigra, "origem") != -1 && index($paginaMigra, "lido") != -1)
+                                    {
+                                        %resposta = (
+                                            status  => "erro",
+                                            resposta =>  "diretorio de origem invalido",
+                                        );
+                                    }
+                                    elsif(index($paginaMigra, "Erro") != -1 && index($paginaMigra, "utilizar") != -1 && index($paginaMigra, "destino") != -1)
+                                    {
+                                        %resposta = (
+                                            status  => "erro",
+                                            resposta =>  "Erro de FTP. Verifique as credenciais de acesso ao FTP ou o diretorio alvo no FTP remoto",
+                                        );
+                                    }
+                                    elsif(index($paginaMigra, "dominio.migra.ftp.php") != -1 && index($paginaMigra, "id_dominio") != -1 && index($paginaMigra, "id_migracao") != -1)
+                                    {
+                                        %resposta = (
+                                            status  => "sucesso",
+                                            resposta =>  "Migracao em andamento. Quando a migracao terminar os arquivos estarao em seu site",
+                                        );
+                                    }
+                                    else
+                                    {
+                                        %resposta = (
+                                            status  => "erro",
+                                            resposta =>  "$paginaMigra",
+                                        );
+                                    }                        
+                                    
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json);
+                                    return $json_text;
+				}
+				elsif($mech->status() == 404)
+                                {
+                                     %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "not found",
+                                                url =>  $mech->uri(),
+                                     );
+                                     my $json = \%resposta;
+                                     my $json_text = to_json($json);
+                                     return $json_text;
+                                }
+                                else
+                                {
+                                    %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "unknow HTTP error",
+                                                url =>  $mech->uri(),
+                                    );
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json);
+                                    return $json_text;
+                                }
+                            }  
+			}
+			elsif($mech->status() == 404)
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "not found",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json);
+                            return $json_text;
+                        }
+                        else
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "unknow HTTP error",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json);
+                            return $json_text;
+                        }
+		}
+		# migra ftp
+            }
+            else
+            {
+                %resposta = (
+                    status  => "erro",
+                    resposta =>  "efetue login primeiro",
+                );                
+                my $json = \%resposta;
+                my $json_text = to_json($json);
+                            
+                return $json_text;
+            }
+        }
 1;
 
 __END__
@@ -480,13 +732,15 @@ Kinghost::Painel - Object for hosting automation using Kinghost (www.kinghost.ne
 
 =head1 VERSION
 
-version 0.004
+version 0.005
 
 =head1 SYNOPSIS
   
     use Kinghost::Painel; 
 
-    my $painel = new Kinghost::Painel();
+    my $painel = Kinghost::Painel->new();
+    
+    #my $painel = new Kinghost::Painel();
 
     # Loga no painel
     $painel->logar("email@revenda.com.br", "senhadarevenda");
@@ -531,7 +785,7 @@ version 0.004
 
 =head2 logar
 
-Loga no painel de controle. Este método deverá ser usado chamado antes de qualquer outro método. Ativa flag $statusLogin.
+Loga no painel de controle. Este método deverá ser chamado antes de qualquer outro método. Ativa flag $statusLogin.
 
     my $status_login = $painel->logar($email, $senha);
 
@@ -571,7 +825,41 @@ Cadastra Banco PGSql. O nome do banco e do user é criado automaticamente pelo s
 Return JSON
     
     {"resposta":"banco criado","status":"sucesso","banco":"topjeca"}
+    
+    
+=head2 novoMySQL
+
+Cadastra Banco MySQL. O nome do banco e do user é criado automaticamente pelo sistema da kinghost, não sendo opcional.
+    
+    print $painel->novoMySQL($idDominio, $senha);
+
+Return JSON
+    
+    {"resposta":"banco criado","status":"sucesso","banco":"topjeca"}
+
+
+=head2 importaFTPExterno
+
+Importa conteúdo de um FTP remoto para o ftp do domínio local. Informe o diretório de origem e o diretório de destino
+    
+    my $idDominio = "xxxxx";
+    my $host = "ftp.xxxxxx.com.br";
+    my $user = "usuarioftp";
+    my $pass = "senhaftp";
+    my $dirOrigem = 'www';
+    my $dirDestino = 'www';
+    print $painel->importaFTPExterno( $idDominio, $host, $user, $pass, $dirOrigem, $dirDestino );
+
+Return JSON
+    
+    {"resposta":"Migracao em andamento. Quando a migracao terminar os arquivos estarao em seu site","status":"sucesso"}
+    {"resposta":"Erro de FTP. Verifique as credenciais de acesso ao FTP ou o diretorio alvo no FTP remoto","status":"erro"}
+    {"resposta":"diretorio de origem invalido","status":"erro"}
  
+=head1 EXAMPLES
+
+Look at eg/ folder
+
 
 =head1 AUTHORS
 
