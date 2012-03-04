@@ -723,7 +723,7 @@
             }
         }
         
-        sub criaUserStats
+        sub novoUserStats
         {
             my($self, $idDominio, $usuario, $senha) = @_;
             my %resposta;
@@ -738,7 +738,7 @@
 			if($mech->status() == 200)
 			{                          
                             
-                            # criaUserStats
+                            # novoUserStats
                             $mech->get("https://painel2.kinghost.net/stats.php?id_dominio=$idDominio");
                             $mech->submit_form(
 				form_id => "formCria",
@@ -759,9 +759,9 @@
                                     $mech->update_html( $html );
                                     my $tree = HTML::TreeBuilder::XPath->new;
                                     $tree->parse( $html );
-                                    my $respostacriaUserStats = $tree->findnodes( '//body' )->[0]->as_HTML;
+                                    my $respostanovoUserStats = $tree->findnodes( '//body' )->[0]->as_HTML;
                                     # alert##T##usu%E1rio%20adicionado%20com%20sucesso eval##T##window.location%3D%27%2Fstats.php%3Fid_dominio%3D291348%27%3B
-                                    if(index($respostacriaUserStats, "adicionado") != -1 && index($respostacriaUserStats, "sucesso") != -1 && index($respostacriaUserStats, "id_dominio") != -1)
+                                    if(index($respostanovoUserStats, "adicionado") != -1 && index($respostanovoUserStats, "sucesso") != -1 && index($respostanovoUserStats, "id_dominio") != -1)
                                     {
                                         %resposta = (
                                             status  => "sucesso",
@@ -774,7 +774,7 @@
                                     {
                                         %resposta = (
                                                 status  => "erro",
-                                                resposta =>  "$respostacriaUserStats",
+                                                resposta =>  "$respostanovoUserStats",
                                         );
                                     }                        
                                     
@@ -829,7 +829,7 @@
                             return $json_text;
                         }
 		}
-		# criaUserStats
+		# novoUserStats
             }
             else
             {
@@ -975,6 +975,267 @@
             }
         }
         
+        
+        sub editaSenhaCaixaEmail
+        {
+            my($self, $idDominio, $email, $senha) = @_;
+            my %resposta;
+            if($statusLogin)
+            {
+                my $html;
+                my $banco;
+                # editaSenhaCaixaEmail
+		$mech->post("https://painel2.kinghost.net/mysql.php?id_dominio=$idDominio");
+		if($mech->success())
+		{
+			if($mech->status() == 200)
+			{                          
+                            # editaSenhaCaixaEmail
+                            $mech->get("https://painel2.kinghost.net/kingmail.php?id_dominio=$idDominio");
+                            $mech->submit_form(
+                            form_id => "addCaixa",
+                                fields      => {
+                                        acao => "trocaSenha",
+                                        id_dominio => $idDominio,
+                                        mail => "$email",
+                                        novaSenha => $senha,
+                                                        }
+                            );
+                            if($mech->success())
+                            {
+				if($mech->status() == 200)
+				{
+                                    $html = $mech->content;
+                                    $mech->update_html( $html );
+                                    my $tree = HTML::TreeBuilder::XPath->new;
+                                    $tree->parse( $html );
+                                    my $respostaeditaSenhaCaixaEmail = $tree->findnodes( '//body' )->[0]->as_HTML;
+                                    # BUG sempre responde a mesma coisa, mesma se a conta nao existir.
+                                    if(index($respostaeditaSenhaCaixaEmail, "Senha do email") != -1 && index($respostaeditaSenhaCaixaEmail, "Alterada Com") != -1)
+                                    {
+                                        %resposta = (
+                                            status  => "sucesso",
+                                                resposta =>  "senha alterada com sucesso",
+                                                email => $email,
+                                         );
+                                    }
+                                    else
+                                    {
+                                        %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "$respostaeditaSenhaCaixaEmail",
+                                        );
+                                    }                     
+                                    
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json, { utf8  => 1 });
+                                    return $json_text;
+				}
+				elsif($mech->status() == 404)
+                                {
+                                     %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "not found",
+                                                url =>  $mech->uri(),
+                                     );
+                                     my $json = \%resposta;
+                                     my $json_text = to_json($json, { utf8  => 1 });
+                                     return $json_text;
+                                }
+                                else
+                                {
+                                    %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "unknow HTTP error",
+                                                url =>  $mech->uri(),
+                                    );
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json, { utf8  => 1 });
+                                    return $json_text;
+                                }
+                            }  
+			}
+			elsif($mech->status() == 404)
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "not found",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json, { utf8  => 1 });
+                            return $json_text;
+                        }
+                        else
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "unknow HTTP error",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json, { utf8  => 1 });
+                            return $json_text;
+                        }
+		}
+		# editaSenhaCaixaEmail
+            }
+            else
+            {
+                %resposta = (
+                    status  => "erro",
+                    resposta =>  "efetue login primeiro",
+                );                
+                my $json = \%resposta;
+                my $json_text = to_json($json, { utf8  => 1 });
+                            
+                return $json_text;
+            }
+        }
+        
+        
+        sub listaCaixasEmail
+        {
+            my($self, $idDominio) = @_;
+            my %resposta;
+            if($statusLogin)
+            {
+                my $html;
+                my $banco;
+                $mech->post("https://painel2.kinghost.net/mysql.php?id_dominio=$idDominio");
+		if($mech->success())
+		{
+			if($mech->status() == 200)
+			{                          
+                            # listaCaixasEmail
+                            $mech->get("https://painel2.kinghost.net/kingmail.php?id_dominio=$idDominio");	
+                            
+                            if($mech->success())
+                            {
+				if($mech->status() == 200)
+				{
+                                    $html = $mech->content;
+                                    $mech->update_html( $html );
+                                    my $tree = HTML::TreeBuilder::XPath->new;
+                                    $tree->parse( $html );
+                                    my $respostalistaCaixasEmail = $tree->findnodes( '//body' )->[0]->as_HTML;
+                                    
+                                    my @codigo = split(/var contas = \[/, $respostalistaCaixasEmail);
+                                    @codigo = split(/\]/, $codigo[1]);
+                                    
+                                    my @objJSONs = split(/\}\,/, $codigo[0]);
+                                    
+                                    my @caixas;
+                                    
+                                    foreach my $objJSON(@objJSONs)
+                                    {
+                                    	#$objJSON = ~ s[}},][]g; 
+                                    	
+                                    	#print $objJSON."},";
+                                    	
+                                    	my @vetObJson = split(/,/, $objJSON);
+                                    	
+                                    	my @vetEmail = split(/\'username\'\:\'/, $vetObJson[1]); #'
+                                    	@vetEmail = split(/\'/, $vetEmail[1]); #'
+                                    	
+                                    	my @vetQuota = split(/\'quota\'\:\'/, $vetObJson[3]); #'
+                                    	@vetQuota = split(/\'/, $vetQuota[1]); #'
+                                    	
+                                    	my @vetOcupado = split(/\'ocupado\'\:\'/, $vetObJson[4]); #'
+                                    	@vetOcupado = split(/\'/, $vetOcupado[1]); #'
+                                    	
+                                    	my @vetTipo = split(/\'tipo\'\:\'/, $vetObJson[5]); #'
+                                    	@vetTipo = split(/\'/, $vetTipo[1]); #'
+                                    	
+                                    	
+                                    	#forma a caixa
+                                        my $caixa = {
+                                            caixa =>	$vetEmail[0],
+                                            quota => $vetQuota[0],
+                                            ocupado => $vetOcupado[0],
+                                            tipo => $vetTipo[0],
+                                        };
+                                        
+                                        # poe a caixa na lista de caixas
+                                        push @caixas, $caixa;
+                                    }
+                                    
+                                    
+                                    
+                                    %resposta = (
+                                        status  => "sucesso",
+                                        caixas =>  [@caixas],
+                                    );
+                                                      
+                                    
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json, { utf8  => 1 });
+                                    return $json_text;
+				}
+				elsif($mech->status() == 404)
+                                {
+                                     %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "not found",
+                                                url =>  $mech->uri(),
+                                     );
+                                     my $json = \%resposta;
+                                     my $json_text = to_json($json, { utf8  => 1 });
+                                     return $json_text;
+                                }
+                                else
+                                {
+                                    %resposta = (
+                                                status  => "erro",
+                                                resposta =>  "unknow HTTP error",
+                                                url =>  $mech->uri(),
+                                    );
+                                    my $json = \%resposta;
+                                    my $json_text = to_json($json, { utf8  => 1 });
+                                    return $json_text;
+                                }
+                            }  
+			}
+			elsif($mech->status() == 404)
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "not found",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json, { utf8  => 1 });
+                            return $json_text;
+                        }
+                        else
+                        {
+                            %resposta = (
+                                status  => "erro",
+                                resposta =>  "unknow HTTP error",
+                                url =>  $mech->uri(),
+                            );
+                            my $json = \%resposta;
+                            my $json_text = to_json($json, { utf8  => 1 });
+                            return $json_text;
+                        }
+		}
+		# editaSenhaCaixaEmail
+            }
+            else
+            {
+                %resposta = (
+                    status  => "erro",
+                    resposta =>  "efetue login primeiro",
+                );                
+                my $json = \%resposta;
+                my $json_text = to_json($json, { utf8  => 1 });
+                            
+                return $json_text;
+            }
+        }
+        
+        
+        
               
 1;
 
@@ -987,7 +1248,7 @@ Kinghost::Painel - Object for hosting automation using Kinghost (www.kinghost.ne
 
 =head1 VERSION
 
-version 0.006
+version 0.007
 
 =head1 SYNOPSIS
   
@@ -1005,8 +1266,8 @@ version 0.006
     my $nome = "José da Silva";
     my $tipoPessoa = "F"; # F - J - I(ignorar)
     my $cpfcnpj = "000.000.000-00"; # CPF ou CNPJ
-    my $email = 'josesilva@gmail.com';
-    my $emailcobranca = 'josesilva@gmail.com';
+    my $email = 'josesilva@gmail.com'; # não deve ser igual @dominiodocliente.com.br
+    my $emailcobranca = 'josesilva@gmail.com'; # não deve ser igual @dominiodocliente.com.br
     my $senha = "xxxxxx";
     my $senhaConfimacao = "xxxx";
     my $telefone = "";
@@ -1049,7 +1310,7 @@ version 0.006
     my $idDominio = "000000";
     my $usuario = "xxxxx";
     my $senha = "xxxxx";
-    print $painel->criaUserStats( $idDominio, $usuario, $senha );
+    print $painel->novoUserStats( $idDominio, $usuario, $senha );
     
     
     # cria nova conta de e-mail
@@ -1060,6 +1321,17 @@ version 0.006
     print $painel->novaCaixaEmail( $idDominio, $caixa, $senha, $tamanho );
     
     
+    # edita senha de conta de e-mail
+    my $idDominio = "291348";
+    my $email = 'caixa@topjeca.com.br';
+    my $senha = "fuzzy24k";
+    print $painel->editaSenhaCaixaEmail( $idDominio, $email, $senha );
+    
+    # lista todas as caixas de e-mail do domínio
+    my $idDominio = "0000000";
+    print $painel->listaCaixasEmail( $idDominio );
+    
+
 
 =head1 METHODS
 
@@ -1077,7 +1349,22 @@ Return string
 
 Cadastra novo cliente
 
-    print $painel->novoCliente($empresa, $nome, $tipoPessoa, $cpfcnpj, $email, $emailcobranca, $senha, $senhaConfimacao, $telefone, $fax, $cep, $endereco, $cidade, $estado);
+    # Novo Cliente
+    my $empresa = "Yogurteiras Top Jeca";
+    my $nome = "José da Silva";
+    my $tipoPessoa = "F"; # F - J - I(ignorar)
+    my $cpfcnpj = "000.000.000-00"; # CPF ou CNPJ
+    my $email = 'josesilva@gmail.com'; # não deve ser igual @dominiodocliente.com.br
+    my $emailcobranca = 'josesilva@gmail.com'; # não deve ser igual @dominiodocliente.com.br
+    my $senha = "xxxxxx";
+    my $senhaConfimacao = "xxxx";
+    my $telefone = "";
+    my $fax = "";
+    my $cep = "";
+    my $endereco = "";
+    my $cidade = "";
+    my $estado = "";
+    print $painel->novoCliente( $empresa, $nome, $tipoPessoa, $cpfcnpj, $email, $emailcobranca, $senha, $senhaConfimacao, $telefone, $fax, $cep, $endereco, $cidade, $estado );
 
 Return JSON
 
@@ -1089,22 +1376,33 @@ Return JSON
 
 Cadastra novo Dominio
     
-    print $painel->novoDominio($plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail);
+    my $plano = "45198";
+    my $dominio = "topjeca.com.br";
+    my $cliente = "107645";
+    my $pagoate = "2012-03-01";
+    my $senha = "testeteste";
+    my $plataforma = "Windows";
+    my $webmail = "SquirrelMail";
+    print $painel->novoDominio( $plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail );
 
 Return JSON
 
     {"dominio":"topjeca.com.br","resposta":"registrado","status":"sucesso","codigo":"291076"}
     {"dominio":"topjeca.com.br","resposta":"dominio ja existe","status":"erro"}
+    {"resposta":"efetue login primeiro","status":"erro"}
 
 =head2 novoPGSql
 
 Cadastra Banco PGSql. O nome do banco e do user é criado automaticamente pelo sistema da kinghost, não sendo opcional.
     
+    my $idDominio = "291076";
+    my $senha = "teste";
     print $painel->novoPGSql($idDominio, $senha);
 
 Return JSON
     
     {"resposta":"banco criado","status":"sucesso","banco":"topjeca"}
+    {"resposta":"efetue login primeiro","status":"erro"}
     
     
 =head2 novoMySQL
@@ -1116,40 +1414,23 @@ Cadastra Banco MySQL. O nome do banco e do user é criado automaticamente pelo s
 Return JSON
     
     {"resposta":"banco criado","status":"sucesso","banco":"topjeca"}
+    {"resposta":"efetue login primeiro","status":"erro"}
 
-
-=head2 importaFTPExterno
-
-Importa conteúdo de um FTP remoto para o ftp do domínio local. Informe o diretório de origem e o diretório de destino
-    
-    my $idDominio = "000000";
-    my $host = "ftp.xxxxxx.com.br";
-    my $user = "usuarioftp";
-    my $pass = "senhaftp";
-    my $dirOrigem = 'www';
-    my $dirDestino = 'www';
-    print $painel->importaFTPExterno( $idDominio, $host, $user, $pass, $dirOrigem, $dirDestino );
-
-Return JSON
-    
-    {"resposta":"Migracao em andamento. Quando a migracao terminar os arquivos estarao em seu site","status":"sucesso"}
-    {"resposta":"Erro de FTP. Verifique as credenciais de acesso ao FTP ou o diretorio alvo no FTP remoto","status":"erro"}
-    {"resposta":"diretorio de origem invalido","status":"erro"}
-    
-
-=head2 criaUserStats
+ 
+=head2 novoUserStats
 
 Protege e cria um usuário para acesso ao stats do domínio. www.dominio.com.br/stats
     
     my $idDominio = "000000";
     my $usuario = "xxxxx";
     my $senha = "xxxxx";
-    print $painel->criaUserStats( $idDominio, $usuario, $senha );
+    print $painel->novoUserStats( $idDominio, $usuario, $senha );
 
 Return JSON
     
     {"resposta":"usuario do stats criado com sucesso","status":"sucesso"}
     {"resposta":"error string","status":"erro"}
+    {"resposta":"efetue login primeiro","status":"erro"}
     
 
 =head2 novaCaixaEmail
@@ -1170,6 +1451,59 @@ Return JSON
     
     {"usuario":"caixa","resposta":"caixa postal ja existe","status":"erro"}
     {"senha":"senhaemail","usuario":"contato","resposta":"caixa de e-mail criada com sucesso","status":"sucesso"}
+    {"resposta":"efetue login primeiro","status":"erro"}
+    
+    
+=head2 editaSenhaCaixaEmail
+
+Edita senha de caixa de e-mail    
+    
+    my $idDominio = "291348";
+    my $email = 'caixa@topjeca.com.br';
+    my $senha = "fuzzy24k";
+    print $painel->editaSenhaCaixaEmail( $idDominio, $email, $senha );
+    
+Return JSON
+    
+    {"email":"caixa@topjeca.com.br","resposta":"senha alterada com sucesso","status":"sucesso"}
+    {"resposta":"efetue login primeiro","status":"erro"}
+
+
+=head2 listaCaixasEmail
+
+Lista todas as caixas de e-mail do domínio
+    
+    my $idDominio = "0000000";
+    print $painel->listaCaixasEmail( $idDominio );
+    
+Return JSON
+    
+    {"caixas":
+    [
+        {"quota":"5242880","tipo":"mailbox","caixa":"caixa@topjeca.com.br","ocupado":"0"}
+        ,{"quota":"5242880","tipo":"mailbox","caixa":"contato@topjeca.com.br","ocupado":"0"}
+        ,{"quota":"1048576","tipo":"mailbox","caixa":"topjeca@topjeca.com.br","ocupado":"0"}
+    ],"status":"sucesso"}
+
+
+=head2 importaFTPExterno
+
+Importa conteúdo de um FTP remoto para o ftp do domínio local. Informe o diretório de origem e o diretório de destino
+    
+    my $idDominio = "000000";
+    my $host = "ftp.xxxxxx.com.br";
+    my $user = "usuarioftp";
+    my $pass = "senhaftp";
+    my $dirOrigem = 'www';
+    my $dirDestino = 'www';
+    print $painel->importaFTPExterno( $idDominio, $host, $user, $pass, $dirOrigem, $dirDestino );
+
+Return JSON
+    
+    {"resposta":"Migracao em andamento. Quando a migracao terminar os arquivos estarao em seu site","status":"sucesso"}
+    {"resposta":"Erro de FTP. Verifique as credenciais de acesso ao FTP ou o diretorio alvo no FTP remoto","status":"erro"}
+    {"resposta":"diretorio de origem invalido","status":"erro"}
+    {"resposta":"efetue login primeiro","status":"erro"}
 
 
 =head1 EXAMPLES

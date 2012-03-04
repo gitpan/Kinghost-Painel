@@ -1,27 +1,22 @@
 <%@LANGUAGE="PerlScript" CODEPAGE="65001"%>
 <%
-use strict;
-use warnings 'all';
 use Win32::ASP;
-
-use base 'ASP4::FormHandler';
-use vars __PACKAGE__->VARS; # Import $Request, $Response, $Session, etc:
+use Kinghost::Painel;
 
 $Response->{charset}="utf-8";
 
-use Kinghost::Painel; 
 my $painel = Kinghost::Painel->new();
 
-$painel->logar('xxxxxxxx@xxxxxx.com','xxxxxxxxx');
+$painel->logar('email@revenda.com.br','xxxxxxx');
 
-my $empresa = "João25";
-my $nome = "José João25";
+my $empresa = "Yougurteiras Top Jeca";
+my $nome = "José da Silva";
 my $tipoPessoa = "F"; # F J I()ignorar
 my $cpfcnpj = "000.000.000-00";
-my $email = 'xxxxxxx@gmail.com';
-my $emailcobranca = 'xxxxxx@gmail.com';
-my $senha = "xxxxxxxxx";
-my $senhaConfimacao = "xxxxxxxx";
+my $email = 'josesilva@gmail.com'; # não deve ser igual @dominiodocliente.com.br
+my $emailcobranca = 'josesilva@gmail.com'; # não deve ser igual @dominiodocliente.com.br
+my $senha = "testefuzzy";
+my $senhaConfimacao = "testefuzzy";
 my $telefone = "";
 my $fax = "";
 my $cep = "";
