@@ -1,7 +1,7 @@
 ---
 abstract: 'Object for hosting automation using Kinghost (www.kinghost.net) v2 Control Panel'
 author:
-  - 'Eduardo Perotta de Almeida <eduardo@web2solutions.com.br>'
+  - 'José Eduardo Perotta de Almeida <eduardo@web2solutions.com.br>'
 build_requires: {}
 configure_requires:
   ExtUtils::MakeMaker: 6.30
@@ -21,4 +21,4 @@ requires:
   strict: 0
   utf8: 0
   warnings: 0
-version: 0.9
+version: 1.0

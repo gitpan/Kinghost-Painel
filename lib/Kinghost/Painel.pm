@@ -1307,9 +1307,10 @@ __END__
 
 Kinghost::Painel - Object for hosting automation using Kinghost (www.kinghost.net) v2 Control Panel
 
-=head1 VERSION
 
-version 0.009
+=head1 VERSION 
+
+version 1.0
 
 =head1 SYNOPSIS
   
@@ -1474,7 +1475,7 @@ Cadastra Banco PGSql. O nome do banco e do user é criado automaticamente pelo s
     
     my $idDominio = "291076";
     my $senha = "teste";
-    print $painel->novoPGSql($idDominio, $senha);
+    print $painel->novoPGSql( $idDominio, $senha );
 
 Return JSON
     
@@ -1510,7 +1511,7 @@ Print JSON
 
 Cadastra Banco MySQL. O nome do banco e do user é criado automaticamente pelo sistema da kinghost, não sendo opcional.
     
-    print $painel->novoMySQL($idDominio, $senha);
+    print $painel->novoMySQL( $idDominio, $senha );
 
 Return JSON
     

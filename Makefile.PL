@@ -10,7 +10,7 @@ use ExtUtils::MakeMaker 6.30;
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Object for hosting automation using Kinghost (www.kinghost.net) v2 Control Panel",
-  "AUTHOR" => "Eduardo Perotta de Almeida <eduardo\@web2solutions.com.br>",
+  "AUTHOR" => "Jos\351 Eduardo Perotta de Almeida <eduardo\@web2solutions.com.br>",
   "BUILD_REQUIRES" => {},
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.30"
@@ -29,7 +29,7 @@ my %WriteMakefileArgs = (
     "utf8" => 0,
     "warnings" => 0
   },
-  "VERSION" => "0.9",
+  "VERSION" => "1.0",
   "test" => {
     "TESTS" => ""
   }
