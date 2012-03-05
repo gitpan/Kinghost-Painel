@@ -7,6 +7,7 @@
         use HTML::TreeBuilder::XPath;
         use HTML::Entities;
         use JSON;
+        use DBI;
         
         my $statusLogin;
         my $entitieschars;
@@ -25,7 +26,23 @@
             
             bless $self, $class;           
             return $self, $class;
-        } 
+        }
+        
+        sub erro
+	{
+            my($self, $strErro) = @_;
+            my @veterro=split(/ERRO/, $strErro);
+            my @errvet2=split(/;/, @veterro[1]);
+            @errvet2[0]=~ s/: //g;           
+            my %resposta = (
+                status  => "erro",
+		resposta =>  @errvet2[0],
+            );
+            my $json = \%resposta;
+            my $json_text = to_json($json, { utf8  => 1 });
+            print $json_text;
+            exit;
+	}
         
         sub logar
         {
@@ -469,6 +486,53 @@
                 return $json_text;
             }
         }
+        
+        sub conectarPGSql()
+	{
+            my($self, $hostbanco, $nomebanco, $userbanco, $senhabanco) = @_;
+            my $dsn="DRIVER={PostGreSQL UNICODE}; SERVER=$hostbanco; DATABASE=$nomebanco; UID=$userbanco; PWD=$senhabanco; OPTION=3; set lc_monetary=pt_BR; set lc_numeric=pt_BR; set lc_time=pt_BR; SET datestyle TO POSTGRES, DMY;";
+            return DBI->connect("DBI:ADO:$dsn") or die "problema ao conectar ao pgsql";
+	}
+	
+	sub rodaScriptPGSql()
+	{
+            my($self, $hostbanco, $nomebanco, $userbanco, $senhabanco, $sql) = @_;
+            my $conexao = $self->conectarPGSql( $hostbanco, $nomebanco, $userbanco, $senhabanco );
+            my $dbh = $conexao->prepare($sql);
+            $dbh->execute() or $self->erro($conexao->errstr);
+            $dbh->finish;
+            $conexao->disconnect;
+            my %resposta = (
+                status  => "sucesso",
+                resposta =>  "executado com sucesso",
+            );
+            my $json = \%resposta;
+            my $json_text = to_json($json, { utf8  => 1 });
+            print $json_text;
+	}
+	
+	sub leScriptSQL
+	{
+	    my($self, $arquivo, $path) = @_;
+            my $sql;
+            my $mudadir = chdir $path;
+
+            open(ARQUIVOSQL, "$arquivo") or die "Nao foi possivel abrir o arquivo para leitura: $!";
+            my @VetSQL = <ARQUIVOSQL>;
+            close ARQUIVOSQL;
+
+            my $i = 0;
+            foreach my $linha (@VetSQL)
+            {
+                    if($i > 0)
+                    {	
+                            $sql = $sql.$linha; 
+                    }
+                    $i++;
+            };
+
+            return $sql;
+	}
         
         
         sub novoMySQL
@@ -1248,7 +1312,7 @@ Kinghost::Painel - Object for hosting automation using Kinghost (www.kinghost.ne
 
 =head1 VERSION
 
-version 0.007
+version 0.008
 
 =head1 SYNOPSIS
   
@@ -1280,20 +1344,35 @@ version 0.007
 
 
     # Novo Domínio
-    my $plano = "45198";
+    my $plano = "0000000";
     my $dominio = "topjeca.com.br";
     my $cliente = "107645";
     my $pagoate = "2012-03-01";
     my $senha = "testeteste";
     my $plataforma = "Windows";
-    my $webmail = "SquirrelMail";
+    my $webmail = "SquirrelMail"; # SquirrelMail, NutsMail, RoundCube, TupiMail, Horde
     print $painel->novoDominio( $plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail );
 
 
     # Novo Banco PGSql
-    my $idDominio = "291076";
-    my $senha = "teste";
-    print $painel->novoPGSql($idDominio, $senha);
+    my $idDominio = "000000";
+    my $senha = "xxxxxx";
+    print $painel->novoPGSql( $idDominio, $senha );
+
+
+    # lê arquivo SQL
+    my $arquivo = "topjeca.sql";
+    my $path = $Server->MapPath("../../sql/"); # caminho absoluto
+    my $sql = $painel->leScriptSQL( $arquivo, $path );
+
+
+    # roda script SQL
+    my $hostbanco = "localhost";
+    my $nomebanco = "topjeca";
+    my $userbanco = "topjeca";
+    my $senhabanco = "xxxxxx";
+    my $sql = $painel->leScriptSQL( $arquivo, $path );
+    $painel->rodaScriptPGSql( $hostbanco, $nomebanco, $userbanco, $senhabanco, $sql );
     
     
     # importa FTP externo
@@ -1326,6 +1405,7 @@ version 0.007
     my $email = 'caixa@topjeca.com.br';
     my $senha = "fuzzy24k";
     print $painel->editaSenhaCaixaEmail( $idDominio, $email, $senha );
+    
     
     # lista todas as caixas de e-mail do domínio
     my $idDominio = "0000000";
@@ -1382,7 +1462,7 @@ Cadastra novo Dominio
     my $pagoate = "2012-03-01";
     my $senha = "testeteste";
     my $plataforma = "Windows";
-    my $webmail = "SquirrelMail";
+    my $webmail = "SquirrelMail"; # SquirrelMail, NutsMail, RoundCube, TupiMail, Horde
     print $painel->novoDominio( $plano, $cliente, $pagoate, $dominio, $senha, $plataforma, $webmail );
 
 Return JSON
@@ -1403,6 +1483,30 @@ Return JSON
     
     {"resposta":"banco criado","status":"sucesso","banco":"topjeca"}
     {"resposta":"efetue login primeiro","status":"erro"}
+    
+    
+=head2 rodaScriptPGSql
+
+Roda um script SQL direto no PostgreSQL Server
+    
+    # informacoes sobre o banco
+    my $hostbanco = "localhost";
+    my $nomebanco = "topjeca";
+    my $userbanco = "topjeca";
+    my $senhabanco = "fuzzy24k";
+
+    # lê arquivo SQL
+    my $arquivo = "imeSaas.sql";
+    my $path = $Server->MapPath("../../sql/"); # caminho absoluto
+    my $sql = $painel->leScriptSQL($arquivo, $path);
+    
+    # roda script SQL
+    $painel->rodaScriptPGSql( $hostbanco, $nomebanco, $userbanco, $senhabanco, $sql );
+
+Print JSON
+    
+    {"resposta":"relação \"desktop_config\" já existe","status":"erro"}
+    {"resposta":"executado com sucesso","status":"sucesso"}
     
     
 =head2 novoMySQL

@@ -20,7 +20,7 @@ my %WriteMakefileArgs = (
   "LICENSE" => "perl",
   "NAME" => "Kinghost::Painel",
   "PREREQ_PM" => {},
-  "VERSION" => "0.7",
+  "VERSION" => "0.8",
   "test" => {
     "TESTS" => ""
   }
