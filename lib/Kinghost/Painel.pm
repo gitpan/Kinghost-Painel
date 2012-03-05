@@ -516,21 +516,18 @@
 	    my($self, $arquivo, $path) = @_;
             my $sql;
             my $mudadir = chdir $path;
-
             open(ARQUIVOSQL, "$arquivo") or die "Nao foi possivel abrir o arquivo para leitura: $!";
             my @VetSQL = <ARQUIVOSQL>;
             close ARQUIVOSQL;
-
             my $i = 0;
             foreach my $linha (@VetSQL)
             {
-                    if($i > 0)
-                    {	
-                            $sql = $sql.$linha; 
-                    }
-                    $i++;
+                if($i > 0)
+                {	
+                    $sql = $sql.$linha; 
+                }
+                $i++;
             };
-
             return $sql;
 	}
         
@@ -1312,7 +1309,7 @@ Kinghost::Painel - Object for hosting automation using Kinghost (www.kinghost.ne
 
 =head1 VERSION
 
-version 0.008
+version 0.009
 
 =head1 SYNOPSIS
   
@@ -1401,9 +1398,9 @@ version 0.008
     
     
     # edita senha de conta de e-mail
-    my $idDominio = "291348";
+    my $idDominio = "00000";
     my $email = 'caixa@topjeca.com.br';
-    my $senha = "fuzzy24k";
+    my $senha = "xxxxx";
     print $painel->editaSenhaCaixaEmail( $idDominio, $email, $senha );
     
     
@@ -1493,7 +1490,7 @@ Roda um script SQL direto no PostgreSQL Server
     my $hostbanco = "localhost";
     my $nomebanco = "topjeca";
     my $userbanco = "topjeca";
-    my $senhabanco = "fuzzy24k";
+    my $senhabanco = "xxxxxxx";
 
     # lê arquivo SQL
     my $arquivo = "imeSaas.sql";
@@ -1562,9 +1559,9 @@ Return JSON
 
 Edita senha de caixa de e-mail    
     
-    my $idDominio = "291348";
+    my $idDominio = "00000";
     my $email = 'caixa@topjeca.com.br';
-    my $senha = "fuzzy24k";
+    my $senha = "xxxxx";
     print $painel->editaSenhaCaixaEmail( $idDominio, $email, $senha );
     
 Return JSON

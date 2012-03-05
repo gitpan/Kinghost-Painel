@@ -19,8 +19,17 @@ my %WriteMakefileArgs = (
   "EXE_FILES" => [],
   "LICENSE" => "perl",
   "NAME" => "Kinghost::Painel",
-  "PREREQ_PM" => {},
-  "VERSION" => "0.8",
+  "PREREQ_PM" => {
+    "DBI" => 0,
+    "HTML::Entities" => 0,
+    "HTML::TreeBuilder::XPath" => 0,
+    "JSON" => 0,
+    "WWW::Mechanize" => 0,
+    "strict" => 0,
+    "utf8" => 0,
+    "warnings" => 0
+  },
+  "VERSION" => "0.9",
   "test" => {
     "TESTS" => ""
   }
